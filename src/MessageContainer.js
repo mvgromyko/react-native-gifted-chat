@@ -10,7 +10,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { FlatList, View, StyleSheet, Keyboard } from 'react-native';
+import { FlatList, View, StyleSheet, Keyboard, Animated } from 'react-native';
 
 import LoadEarlier from './LoadEarlier';
 import Message from './Message';
@@ -79,7 +79,7 @@ export default class MessageContainer extends React.PureComponent {
 
   scrollTo(options) {
     if (this.flatListRef) {
-      this.flatListRef.scrollToOffset(options);
+      this.flatListRef.getNode().scrollToOffset(options);
     }
   }
 
@@ -122,7 +122,12 @@ export default class MessageContainer extends React.PureComponent {
     }
     return (
       <View style={styles.container}>
-        <FlatList
+        <Animated.FlatList
+          scrollEventThrottle={1} // <-- Use 1 here to make sure no events are ever missed
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: this.props.animatedValue } } }],
+            { useNativeDriver: true } // <-- Add this
+          )}
           ref={(ref) => (this.flatListRef = ref)}
           keyExtractor={(item) => item._id}
           enableEmptySections
