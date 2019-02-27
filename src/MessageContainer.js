@@ -165,7 +165,7 @@ export default class MessageContainer extends React.PureComponent {
           inverted={this.props.inverted}
           data={this.props.messages}
           style={styles.listStyle}
-          contentContainerStyle={styles.contentContainerStyle}
+          contentContainerStyle={[styles.contentContainerStyle, { paddingBottom: this.props.paddingValue }]}
           renderItem={this.renderRow}
           {...this.props.invertibleScrollViewProps}
           ListFooterComponent={this.renderHeaderWrapper}
